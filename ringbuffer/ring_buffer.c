@@ -1,25 +1,35 @@
-#ifndef RING_BUFFER_H
-#define RING_BUFFER_H
+#include "ring_buffer.h"
 
-#include <stdint.h>
-#include <stdbool.h>
-#define BUFFER_SIZE 8       // 2-potens
+void rb_init(RingBuffer *rb){
+    rb->head  = 0;
+    rb->tail  = 0;
+    rb->count = 0;
+}
 
-// head=nästa läsposition tail= nästa skriv position count=antal element just nu
+bool rb_is_empty(RingBuffer *rb){
+    return rb->count == 0;
+}
 
-typedef struct{
-    uint8_t data[BUFFER_SIZE];
-    uint8_t head;
-    uint8_t tail;
-    uint8_t count;
-}RingBuffer;
+bool rb_is_full(RingBuffer *rb){
+    return rb->count == BUFFER_SIZE;
+}
 
-void rb_init (RingBuffer *rb);
-bool rb_write (RingBuffer *rb, uint8_t byte);
-bool rb_read (RingBuffer *rb, uint8_t *byte);
-bool rb_is_empty(RingBuffer *rb);
-bool rb_is_full (RingBuffer *rb);
+uint8_t rb_count(RingBuffer *rb){
+    return rb->count;
+}
 
-uint8_t rb_count (RingBuffer *rb);
+bool rb_write(RingBuffer *rb, uint8_t byte){
+    if(rb_is_full(rb)) return false;
+    rb->data[rb->tail] = byte;
+    rb->tail = (rb->tail + 1) % BUFFER_SIZE;
+    rb->count++;
+    return true;
+}
 
-#endif
+bool rb_read(RingBuffer *rb, uint8_t *byte){
+    if(rb_is_empty(rb)) return false;
+    *byte = rb->data[rb->head];
+    rb->head = (rb->head + 1) % BUFFER_SIZE;
+    rb->count--;
+    return true;
+}
