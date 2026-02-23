@@ -1,9 +1,25 @@
+/* Ring Buffer - Cirkulär FIFO-buffert
+ * Jens L, 2026
+ * Källa: https://www.embedded.com/ring-buffer-basics/ &
+ * med stöd av tredjepartstänkaren Ai som bollplank.
+ *
+ * Varför ring buffer och inte vanlig array?
+ * En vanlig array kräver att alla element flyttas vid varje läsning = O(n).
+ * Ring buffer använder bara två pekare (head/tail) som rör sig framåt = O(1).
+ * Ingen dynamic memory allocation
+ *
+ * Tänkt användning: buffera sensordata från UART-interrupt på ESP32
+ * innan main loop hinner processa det.
+ */
+
+
+
 #ifndef RING_BUFFER_H
 #define RING_BUFFER_H
 
 #include <stdint.h>
 #include <stdbool.h>
-#define BUFFER_SIZE 8       // 2-potens
+#define BUFFER_SIZE 8   
 
 // head=nästa läsposition tail= nästa skriv position count=antal element just nu
 
