@@ -1,5 +1,6 @@
-/* Ring Buffer implementation
- * Jens L, 2026
+
+Ring Buffer implementation
+ * 2026
  * Lärt mig av: https://www.embedded.com/ring-buffer-basics/ &
  * med stöd av tredjepartstänkaren Ai som bollplank
  * för att buffera sensordata från UART
